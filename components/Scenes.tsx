@@ -69,6 +69,8 @@ export function Stats() {
     const ctx = gsap.context(() => {
       gsap.fromTo(".st-a", { xPercent: 0 }, { xPercent: -28, ease: "none", scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom top", scrub: true } });
       gsap.fromTo(".st-b", { xPercent: -28 }, { xPercent: 0, ease: "none", scrollTrigger: { trigger: root.current, start: "top bottom", end: "bottom top", scrub: true } });
+      const skew = gsap.quickTo(".st-row", "skewX", { duration: 0.45, ease: "power3" });
+      ScrollTrigger.create({ onUpdate: (self) => skew(gsap.utils.clamp(-9, 9, self.getVelocity() / -260)) });
     }, root);
     return () => ctx.revert();
   }, []);

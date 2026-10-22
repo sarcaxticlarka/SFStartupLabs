@@ -14,7 +14,7 @@ const CARDS = [
 export function Statement() {
   return (
     <section className="statement">
-      <h2 className="giant" data-lines><Lines lines={["Meet the room", "before you move", "there."]} /></h2>
+      <h2 className="giant" data-lines><Lines lines={["Meet the room", "before you move", <span key="t" className="under">there.<svg viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden><path d="M4 15c36-12 62 8 100-2s64 8 98-2 58 6 94-2" /></svg></span>]} /></h2>
       {CARDS.map((c) => (
         <div key={c.i} className="fcard" style={{ left: c.l, top: c.t }} data-speed={c.s}>
           {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -37,9 +37,12 @@ export function Preloader() {
   );
 }
 
-/** Cursor ring that grows over interactive things, plus magnetic buttons. Desktop only. */
+const LABELS: [string, string][] = [["[data-cursor]", ""], [".btn", "Go"], [".r-row", "Meet"], [".w-card", "Scroll"], [".fcard", "Hi"]];
+
+/** Cursor ring that grows over interactive things and names them; also pulls buttons toward the mouse. Desktop only. */
 export function Cursor() {
   const ring = useRef<HTMLDivElement>(null);
+  const label = useRef<HTMLSpanElement>(null);
   useEffect(() => {
     if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     const el = ring.current!;
@@ -47,9 +50,14 @@ export function Cursor() {
     const y = gsap.quickTo(el, "y", { duration: 0.35, ease: "power3" });
     const move = (e: MouseEvent) => {
       x(e.clientX); y(e.clientY);
-      const t = (e.target as HTMLElement).closest("a, button, .r-row, .fcard");
-      el.classList.toggle("big", !!t);
-      const b = (e.target as HTMLElement).closest<HTMLElement>(".btn");
+      const t = e.target as HTMLElement;
+      let text = "";
+      for (const [sel, def] of LABELS) { const m = t.closest<HTMLElement>(sel); if (m) { text = m.dataset.cursor ?? def; break; } }
+      const interactive = !!t.closest("a, button, .r-row, .fcard, .w-card");
+      el.classList.toggle("big", interactive && !text);
+      el.classList.toggle("tag", !!text);
+      if (label.current && label.current.textContent !== text) label.current.textContent = text;
+      const b = t.closest<HTMLElement>(".btn");
       document.querySelectorAll<HTMLElement>(".btn").forEach((n) => { if (n !== b) gsap.to(n, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1,.5)", overwrite: "auto" }); });
       if (b) { const r = b.getBoundingClientRect(); gsap.to(b, { x: (e.clientX - r.left - r.width / 2) * 0.25, y: (e.clientY - r.top - r.height / 2) * 0.35, duration: 0.3, overwrite: "auto" }); }
     };
@@ -57,5 +65,5 @@ export function Cursor() {
     addEventListener("mousemove", move);
     return () => removeEventListener("mousemove", move);
   }, []);
-  return <div ref={ring} className="cursor" aria-hidden />;
+  return <div ref={ring} className="cursor" aria-hidden><span ref={label} /></div>;
 }

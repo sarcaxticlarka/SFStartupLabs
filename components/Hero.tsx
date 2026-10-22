@@ -4,6 +4,8 @@ import { gsap } from "gsap";
 import { bridge, scribble } from "@/lib/paths";
 import { photos } from "@/lib/data";
 import { APPLY, Logo } from "./Chrome";
+import HeroGL from "./HeroGL";
+import { SFClock } from "./Clock";
 
 /** Jeton-style colour panel: giant white headline, small text block bottom-right. The scribble tightens into the bridge. */
 export default function Hero() {
@@ -24,7 +26,6 @@ export default function Hero() {
         .to(".d-hang", { strokeDashoffset: 0, duration: 1.2, ease: "power1.out" }, 4.7);
       // cinematic push-in while the hero stays pinned
       gsap.timeline({ scrollTrigger: { trigger: root.current, start: "top 10px", end: "+=120%", pin: true, scrub: 0.6 } })
-        .to(".hero-bg img", { scale: 1.32, ease: "none" }, 0)
         .to(".hero-bg i", { opacity: 1, ease: "none" }, 0)
         .to(".hero-bottom", { y: -160, opacity: 0, ease: "none" }, 0)
         .to(".hero-art", { opacity: 0, y: -60, ease: "power1.in" }, 0);
@@ -35,13 +36,13 @@ export default function Hero() {
   return (
     <section ref={root} className="hero" id="top">
       <div className="hero-bg" aria-hidden>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={photos.demo} alt="" />
+        <HeroGL src="/api/img?p=/program-photos/demo-night.webp" fallback={photos.demo} />
         <i />
       </div>
       <header className="hero-bar">
         <Logo light />
-        <a className="btn white" href={APPLY}>Apply</a>
+        <SFClock className="hero-clock" />
+        <a className="btn white" href={APPLY} data-cursor="Apply">Apply</a>
       </header>
       <svg className="hero-art" viewBox="0 0 1200 170" aria-hidden>
         <path className="draw d-scr" d={art.scr} />
@@ -59,9 +60,10 @@ export default function Hero() {
         <div className="hero-side hero-in">
           <p>Three weeks for early-stage founders. Two online, one in San Francisco, with the people who decide who gets funded. $2,900 per team, no equity.</p>
           <div className="hero-btns">
-            <a className="btn white" href={APPLY}>Apply for Spring 2027</a>
+            <a className="btn white" href={APPLY} data-cursor="Apply">Apply for Spring 2027</a>
             <a className="btn ghost" href="#program">See the schedule</a>
           </div>
+          <span className="hand-note" aria-hidden>no equity, really<svg viewBox="0 0 60 40"><path d="M4 6c18 2 40 8 46 28M50 34l-9-3m9 3l2-10" /></svg></span>
         </div>
       </div>
     </section>

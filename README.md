@@ -17,3 +17,10 @@ Design references: HIFI (black technical sections, acid accent, hairline tables,
 - `components/Stepper.tsx` — five-step apply flow in a phone
 - `components/Rest.tsx` — photo panel, fit, FAQ, closing bridge, footer
 - `lib/data.ts` — mentors, photos, FAQ. Photos load from https://sfstartuplabs.com; copy them into `public/` before launch.
+
+## Before you send it
+Edit `lib/profile.ts` (name, role, email, portfolio, GitHub). It feeds the "Concept by …" pill and the build-notes drawer.
+
+- `components/HeroGL.tsx` — OGL shader: cursor-driven liquid push, RGB split, duotone grade
+- `app/api/img/route.ts` — same-origin image route so WebGL can use photos from sfstartuplabs.com
+- `components/Concept.tsx` — build-notes drawer

@@ -17,7 +17,33 @@ export default function Smooth() {
       gsap.ticker.add(tick);
       gsap.ticker.lagSmoothing(0);
     }
+    const restore: (() => void)[] = [];
     const ctx = gsap.context(() => {
+      // reading progress
+      ScrollTrigger.create({ start: 0, end: "max", onUpdate: (self) => document.documentElement.style.setProperty("--p", String(self.progress)) });
+      // mono labels decode themselves when they scroll into view
+      const glyphs = "░▒▓<>/\\_—+*#";
+      gsap.utils.toArray<HTMLElement>("main .mono").forEach((el) => {
+        if (el.children.length || el.closest(".preloader, .clock, .wipe-count, .counter, .announce")) return;
+        const text = el.textContent ?? "";
+        if (text.trim().length < 3) return;
+        restore.push(() => { el.textContent = text; });
+        ScrollTrigger.create({
+          trigger: el, start: "top 92%", once: true,
+          onEnter: () => {
+            const o = { p: 0 };
+            gsap.to(o, { p: 1, duration: Math.min(1.3, 0.4 + text.length * 0.03), ease: "none",
+              onUpdate: () => { let out = ""; for (let i = 0; i < text.length; i++) out += text[i] === " " || i < o.p * text.length ? text[i] : glyphs[(Math.random() * glyphs.length) | 0]; el.textContent = out; },
+              onComplete: () => { el.textContent = text; } });
+          },
+        });
+      });
+      // hand-drawn underline
+      gsap.utils.toArray<SVGPathElement>(".under path").forEach((p) => {
+        const L = p.getTotalLength();
+        gsap.set(p, { strokeDasharray: L, strokeDashoffset: L });
+        gsap.to(p, { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut", delay: 0.5, scrollTrigger: { trigger: p, start: "top 85%" } });
+      });
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) =>
         gsap.from(el, { y: 32, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%" } }));
       gsap.utils.toArray<HTMLElement>("[data-stagger]").forEach((w) =>
@@ -36,6 +62,7 @@ export default function Smooth() {
     });
     return () => {
       ctx.revert();
+      restore.forEach((f) => f());
       if (lenis) {
         gsap.ticker.remove(tick);
         lenis.destroy();

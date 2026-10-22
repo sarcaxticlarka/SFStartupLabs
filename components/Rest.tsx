@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { bridge } from "@/lib/paths";
 import { faq, photos } from "@/lib/data";
 import { APPLY } from "./Chrome";
+import { SFClock } from "./Clock";
 
 gsap.registerPlugin(ScrollTrigger);
 const Lines = ({ lines }: { lines: React.ReactNode[] }) => (<>{lines.map((l, i) => <span className="ln" key={i}><span>{l}</span></span>)}</>);
@@ -96,7 +97,7 @@ export function Cta() {
       <div className="cta-in">
         <p className="mono">Cohort starts April 5, 2027</p>
         <h2 className="giant w" data-lines><Lines lines={["Ready to find", "out?"]} /></h2>
-        <a className="btn white big" href={APPLY}>Apply now</a>
+        <a className="btn white big" href={APPLY} data-cursor="Apply">Apply now</a>
       </div>
     </section>
   );
@@ -110,7 +111,7 @@ export function Footer() {
         <div><p className="mono dim">Contact</p><a href="mailto:hello@sfstartuplabs.com">hello@sfstartuplabs.com</a></div>
         <div><p className="mono dim">System status</p><span className="status"><i />Applications open</span></div>
       </div>
-      <p className="mono dim fine">© 2026 SF Startup Labs. No equity.</p>
+      <p className="mono dim fine">© 2026 SF Startup Labs. No equity. <SFClock className="foot-clock" /></p>
       <div className="foot-word" aria-hidden>SF STARTUP LABS</div>
     </footer>
   );

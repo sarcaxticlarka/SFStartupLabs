@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import { Statement } from "@/components/White";
 import { Wipe, Stats, Weeks } from "@/components/Scenes";
 import { Preloader, Cursor } from "@/components/Cinema";
+import Concept from "@/components/Concept";
 import { Pipeline, Included, People, Panels } from "@/components/Dark";
 import Stepper from "@/components/Stepper";
 import { Photos, Fit, Faq, Cta, Footer } from "@/components/Rest";
@@ -11,6 +12,7 @@ import { Photos, Fit, Faq, Cta, Footer } from "@/components/Rest";
 export default function Home() {
   return (
     <main>
+      <div className="progress" aria-hidden />
       <Preloader />
       <Cursor />
       <Announce />
@@ -30,6 +32,7 @@ export default function Home() {
       <Faq />
       <Cta />
       <Footer />
+      <Concept />
       <Smooth />
     </main>
   );
